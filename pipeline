@@ -9,12 +9,7 @@ pipeline{
       sonar_username = 'admin'
       sonar_password = 'admin'
  }
- options {
-    buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '2', numToKeepStr: '10'))
-    ansiColor('xterm')
-    disableConcurrentBuilds()
-  }
-  
+ 
  
  tools{
      jdk 'Java'
