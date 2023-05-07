@@ -3,6 +3,19 @@ pipeline{
      label 'master'
  }   
  
+ environment {
+
+      sonar_url = 'http://13.233.160.119:9000'
+      sonar_username = 'admin'
+      sonar_password = 'admin'
+ }
+ options {
+    buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '2', numToKeepStr: '10'))
+    ansiColor('xterm')
+    disableConcurrentBuilds()
+  }
+  
+ 
  tools{
      jdk 'Java'
      maven 'Maven'
@@ -21,5 +34,18 @@ pipeline{
              sh 'mvn clean package'
          }
      }
+     
+         stage ('Sonarqube Analysis'){
+           steps {
+           withSonarQubeEnv('Sonarqube') {
+           sh 'mvn -e -B sonar:sonar -Dsonar.java.source=1.8 -Dsonar.host.url="${sonar_url}" -Dsonar.login="${sonar_username}" -Dsonar.password="${sonar_password}" -Dsonar.sourceEncoding=UTF-8'
+           }
+         }
+      }
+    stage ('Publish Artifact') {
+        steps {
+          nexusArtifactUploader artifacts: [[artifactId: 'hello-world-war', classifier: '', file: "target/hello-world-war-1.0.0.war", type: 'war']], credentialsId: 'Nexus-cred', groupId: 'com.efsavage', nexusUrl: "${nexus_url}", nexusVersion: 'nexus3', protocol: 'http', repository: 'release', version: "${artifact_version}"
+        }
+      }
  }
 }
