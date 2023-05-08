@@ -8,6 +8,8 @@ pipeline{
       sonar_url = 'http://172.31.8.161:9000'
       sonar_username = 'admin'
       sonar_password = 'admin'
+      nexus_url = '172.31.3.187:8081'
+      artifact_version = '5.0.0'
  }
  
  
@@ -37,6 +39,13 @@ pipeline{
            }
          }
       }
+   
+   stage ('Publish Artifact') {
+        steps {
+          nexusArtifactUploader artifacts: [[artifactId: 'maven-project', classifier: '', file: "server/target/server.jar", type: 'jar']], credentialsId: 'Nexus-cred', groupId: 'com.example.maven-project', nexusUrl: "${nexus_url}", nexusVersion: 'nexus3', protocol: 'http', repository: 'release', version: "${artifact_version}"
+        }
+      }
+
    
  }
 }
