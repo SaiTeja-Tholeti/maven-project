@@ -12,6 +12,12 @@ pipeline{
       artifact_version = '4.0.0'
  }
  
+ parameters {
+        choice(
+        name: 'Branch',
+        choices: ['master','Jenkinsfile','jleetutorial-patch-1-1','jleetutorial-patch-1'],
+        description: 'Please choose any branch to build' )
+ } 
  
  tools{
      jdk 'Java'
@@ -21,7 +27,7 @@ pipeline{
  stages{
      stage('Git clone'){
          steps{
-             git branch: 'master',
+             git branch: '${Branch}',
              url: 'https://github.com/SaiTeja-Tholeti/maven-project.git'
          }
      }
