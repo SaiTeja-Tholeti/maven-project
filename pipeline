@@ -2,23 +2,7 @@ pipeline{
  agent {
      label 'master'
  }   
- 
- /*environment {
 
-      sonar_url = 'http://172.31.8.161:9000'
-      sonar_username = 'admin'
-      sonar_password = 'admin'
-      nexus_url = '172.31.3.187:8081'
-      artifact_version = '4.0.0'
- }
- 
- parameters {
-        choice(
-        name: 'Branch',
-        choices: ['master','Jenkinsfile','jleetutorial-patch-1-1','jleetutorial-patch-1'],
-        description: 'Please choose any branch to build' )
- } */
- 
  tools{
      jdk 'Java'
      maven 'Maven'
@@ -36,22 +20,6 @@ pipeline{
          steps{
              sh 'mvn clean package'
          }
-     }
-     
-         /*stage ('Sonarqube Analysis'){
-           steps {
-           withSonarQubeEnv('Sonarqube') {
-           sh 'mvn -e -B sonar:sonar -Dsonar.java.source=1.8 -Dsonar.host.url="${sonar_url}" -Dsonar.login="${sonar_username}" -Dsonar.password="${sonar_password}" -Dsonar.sourceEncoding=UTF-8'
-           }
-         }
-      }
-   
-   stage ('Publish Artifact') {
-        steps {
-          nexusArtifactUploader artifacts: [[artifactId: 'maven-project', classifier: '', file: "server/target/server.jar", type: 'jar']], credentialsId: 'nexus-cred', groupId: 'com.example.maven-project', nexusUrl: "${nexus_url}", nexusVersion: 'nexus3', protocol: 'http', repository: 'release', version: "${artifact_version}"
-        }
-      }*/
-
-   
+     }  
  }
 }
