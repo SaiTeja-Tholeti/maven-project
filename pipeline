@@ -3,7 +3,7 @@ pipeline{
      label 'master'
  }   
  
- /*environment {
+ environment {
 
       sonar_url = 'http://172.31.13.78:9000'
       sonar_username = 'admin'
@@ -17,7 +17,7 @@ pipeline{
         name: 'Branch',
         choices: ['master','Jenkinsfile','jleetutorial-patch-1-1','jleetutorial-patch-1'],
         description: 'Please choose any branch to build' )
- } */
+ }
  
  tools{
      jdk 'Java'
