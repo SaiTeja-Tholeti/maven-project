@@ -8,8 +8,8 @@ pipeline{
       sonar_url = 'http://172.31.0.19:9000'
       sonar_username = 'admin'
       sonar_password = 'admin'
-     /* nexus_url = '172.31.3.187:8081'
-      artifact_version = '4.0.0' */
+      nexus_url = '172.31.13.78:8081'
+      artifact_version = '4.0.0'
  }
  
  parameters {
@@ -45,7 +45,20 @@ pipeline{
            }
          }
       }
-   
+      
+   stage ("Quality Gate")
+{
+   steps{
+     sleep(30)
+      script {
+       def qualitygate = waitForQualityGate()
+         if (qualitygate.status != 'OK') 
+             {
+            error "Pipeline aborted due to gatr failure: ${qualitygate.status}"
+              }
+            }
+        }
+}   
    stage ('Publish Artifact') {
         steps {
           nexusArtifactUploader artifacts: [[artifactId: 'maven-project', classifier: '', file: "server/target/server.jar", type: 'jar']], credentialsId: 'nexus-cred', groupId: 'com.example.maven-project', nexusUrl: "${nexus_url}", nexusVersion: 'nexus3', protocol: 'http', repository: 'release', version: "${artifact_version}"
